@@ -18,13 +18,33 @@ document.addEventListener('DOMContentLoaded', () => {
 // Load data from JSON
 async function loadData() {
     try {
-        const response = await fetch('data/prompts.json');
-        data = await response.json();
+        // Try to load from localStorage first
+        const savedData = localStorage.getItem('promptsData');
+
+        if (savedData) {
+            data = JSON.parse(savedData);
+        } else {
+            // If no saved data, load from JSON file
+            const response = await fetch('data/prompts.json');
+            data = await response.json();
+            // Save to localStorage
+            saveToLocalStorage();
+        }
+
         renderCategories();
         renderPrompts();
     } catch (error) {
         console.error('Error carregant les dades:', error);
         showToast('Error carregant les dades');
+    }
+}
+
+// Save to localStorage
+function saveToLocalStorage() {
+    try {
+        localStorage.setItem('promptsData', JSON.stringify(data));
+    } catch (error) {
+        console.error('Error desant a localStorage:', error);
     }
 }
 
@@ -210,6 +230,7 @@ function copyPrompt(promptId) {
 function deletePermanently(promptId) {
     if (confirm('Estàs segur que vols esborrar aquest prompt definitivament? Aquesta acció no es pot desfer.')) {
         data.prompts = data.prompts.filter(p => p.id !== promptId);
+        saveToLocalStorage();
         renderPrompts();
         renderCategories();
         showToast('Prompt esborrat definitivament');
@@ -261,6 +282,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     prompt.deleted = false;
                     showToast('Prompt mogut a la categoria');
                 }
+                saveToLocalStorage();
                 renderPrompts();
                 renderCategories();
             }
@@ -320,6 +342,7 @@ function handleCategoryDrop(e) {
             draggedCategory.order = targetOrder;
             targetCategory.order = draggedOrder;
 
+            saveToLocalStorage();
             renderCategories();
             showToast('Categoria reordenada');
         }
@@ -411,6 +434,7 @@ function savePrompt() {
         showToast('Prompt creat');
     }
 
+    saveToLocalStorage();
     closePromptModal();
     renderPrompts();
     renderCategories();
@@ -430,6 +454,7 @@ function deletePrompt() {
             prompt.deleted = true;
             showToast('Prompt mogut a la paperera');
         }
+        saveToLocalStorage();
         closePromptModal();
         renderPrompts();
         renderCategories();
@@ -486,6 +511,7 @@ function saveCategory() {
         showToast('Categoria creada');
     }
 
+    saveToLocalStorage();
     closeCategoryModal();
     renderCategories();
 }
@@ -509,6 +535,7 @@ function deleteCategory() {
 
         if (confirm('Estàs segur que vols esborrar aquesta categoria?')) {
             data.categories = data.categories.filter(c => c.id !== editingCategoryId);
+            saveToLocalStorage();
             showToast('Categoria esborrada');
             closeCategoryModal();
 
@@ -575,19 +602,20 @@ function confirmRestore() {
         showToast('Prompt restaurat');
     }
 
+    saveToLocalStorage();
     closeRestoreModal();
     renderCategories();
     renderPrompts();
 }
 
-// Save data to JSON
+// Save data to JSON (Export to file)
 async function saveData() {
     try {
-        // In a real implementation, this would save to the server
-        // For GitHub Pages, we'll show the JSON for manual update
-        const jsonString = JSON.stringify(data, null, 2);
+        // Save to localStorage first
+        saveToLocalStorage();
 
         // Create a blob and download it
+        const jsonString = JSON.stringify(data, null, 2);
         const blob = new Blob([jsonString], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -596,7 +624,7 @@ async function saveData() {
         a.click();
         URL.revokeObjectURL(url);
 
-        showToast('Dades desades! Substitueix el fitxer data/prompts.json');
+        showToast('JSON exportat! Pots substituir data/prompts.json si vols fer còpia de seguretat');
     } catch (error) {
         console.error('Error desant:', error);
         showToast('Error desant les dades');
