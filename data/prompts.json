@@ -11,13 +11,19 @@
       "name": "Paperera",
       "order": 999,
       "special": true
+    },
+    {
+      "id": "id_1760627344776_06mfpg9z1",
+      "name": "proves",
+      "order": 1,
+      "special": false
     }
   ],
   "prompts": [
     {
       "id": "example1",
       "title": "Prompt d'exemple",
-      "description": "Aquesta és una descripció d'exemple per a un prompt. Pots afegir tant de text com necessitis aquí per descriure el teu prompt.",
+      "description": "Aquesta Ã©s una descripciÃ³ d'exemple per a un prompt. Pots afegir tant de text com necessitis aquÃ­ per descriure el teu prompt.",
       "categoryId": "tots",
       "deleted": false,
       "createdAt": "2025-10-16T12:00:00Z"
