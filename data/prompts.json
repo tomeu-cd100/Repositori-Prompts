@@ -77,6 +77,14 @@
       "categoryId": "id_1760634578840_v8wkhl759",
       "deleted": false,
       "createdAt": "2025-10-16T17:09:52.712Z"
+    },
+    {
+      "id": "id_1760636340453_amnl42k7b",
+      "title": "Característiques Alumnes",
+      "description": "Comporta't com un orientador amb 30 anys d'experiència en el món docent, amb alumnes de la ESO, en un barri marginat i en un centre de màxima complexitat. Allà on la desmotivació i les poques ganes de treballar són constants. Els alumnes tenen les següents característiques provenen la majoria d'entorns culturals empobrits i amb baixos recursos econòmics. , amb dificultats d'aprenentatge, dislèxia i TDAH. Són alumnes que es troben en un Programa de Diversificació Curricular i tenen moltes mancances de coneixements i a més no són conscients de les seves mancances. Crea un programa de 30 hores de formació en orientació per alumnes de 3r de la ESO amb les característiques que t'he dit. Les sessions aniran en blocs de 2 hores per setmana i 50 minuts de duració.",
+      "categoryId": "id_1760636323093_78fze1ord",
+      "deleted": false,
+      "createdAt": "2025-10-16T17:39:00.453Z"
     }
   ]
 }
