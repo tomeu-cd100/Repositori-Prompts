@@ -9,26 +9,48 @@ let editingPromptId = null;
 let editingCategoryId = null;
 let restoringPromptId = null;
 
+// GitHub configuration
+const GITHUB_CONFIG = {
+    owner: 'tomeu-cd100',
+    repo: 'repositori-prompts',
+    filePath: 'data/prompts.json',
+    branch: 'main'
+};
+
+let fileSha = null; // To track the current file SHA for updates
+
 // Initialize app
 document.addEventListener('DOMContentLoaded', () => {
+    checkGitHubToken();
     loadData();
     initEventListeners();
 });
 
-// Load data from JSON
+// Check if GitHub token is configured
+function checkGitHubToken() {
+    const token = localStorage.getItem('githubToken');
+    if (!token) {
+        setTimeout(() => openTokenModal(), 500);
+    }
+}
+
+// Get GitHub token
+function getGitHubToken() {
+    return localStorage.getItem('githubToken');
+}
+
+// Load data from GitHub
 async function loadData() {
     try {
-        // Try to load from localStorage first
-        const savedData = localStorage.getItem('promptsData');
+        const token = getGitHubToken();
 
-        if (savedData) {
-            data = JSON.parse(savedData);
+        if (token) {
+            // Load from GitHub
+            await loadFromGitHub();
         } else {
-            // If no saved data, load from JSON file
+            // Load from local file as fallback
             const response = await fetch('data/prompts.json');
             data = await response.json();
-            // Save to localStorage
-            saveToLocalStorage();
         }
 
         renderCategories();
@@ -39,12 +61,95 @@ async function loadData() {
     }
 }
 
-// Save to localStorage
-function saveToLocalStorage() {
+// Load data from GitHub API
+async function loadFromGitHub() {
+    const token = getGitHubToken();
+    const url = `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${GITHUB_CONFIG.filePath}?ref=${GITHUB_CONFIG.branch}`;
+
     try {
-        localStorage.setItem('promptsData', JSON.stringify(data));
+        const response = await fetch(url, {
+            headers: {
+                'Authorization': `token ${token}`,
+                'Accept': 'application/vnd.github.v3+json'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Error carregant des de GitHub');
+        }
+
+        const fileData = await response.json();
+        fileSha = fileData.sha;
+
+        // Decode base64 content
+        const content = atob(fileData.content);
+        data = JSON.parse(content);
+
+        showToast('Dades carregades des de GitHub');
     } catch (error) {
-        console.error('Error desant a localStorage:', error);
+        console.error('Error carregant des de GitHub:', error);
+        showToast('Error carregant des de GitHub. Verifica el token.');
+        throw error;
+    }
+}
+
+// Save data (both to GitHub and localStorage as backup)
+async function saveToLocalStorage() {
+    const token = getGitHubToken();
+
+    if (token) {
+        // Save to GitHub
+        await saveToGitHub();
+    }
+}
+
+// Save data to GitHub API
+async function saveToGitHub() {
+    const token = getGitHubToken();
+    if (!token) {
+        showToast('Cal configurar el token de GitHub');
+        return;
+    }
+
+    const url = `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${GITHUB_CONFIG.filePath}`;
+
+    try {
+        // Encode content to base64
+        const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
+
+        const body = {
+            message: 'Actualitzar prompts des de l\'aplicació web',
+            content: content,
+            branch: GITHUB_CONFIG.branch
+        };
+
+        // Add SHA if we have it (for updates)
+        if (fileSha) {
+            body.sha = fileSha;
+        }
+
+        const response = await fetch(url, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `token ${token}`,
+                'Accept': 'application/vnd.github.v3+json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Error desant a GitHub');
+        }
+
+        const result = await response.json();
+        fileSha = result.content.sha;
+
+        showToast('✓ Desat a GitHub correctament');
+    } catch (error) {
+        console.error('Error desant a GitHub:', error);
+        showToast('Error desant a GitHub: ' + error.message);
     }
 }
 
@@ -53,7 +158,7 @@ function initEventListeners() {
     // Header buttons
     document.getElementById('addPromptBtn').addEventListener('click', () => openPromptModal());
     document.getElementById('addCategoryBtn').addEventListener('click', () => openCategoryModal());
-    document.getElementById('saveBtn').addEventListener('click', saveData);
+    document.getElementById('configBtn').addEventListener('click', () => openTokenModal());
 
     // Prompt modal
     document.getElementById('savePromptBtn').addEventListener('click', savePrompt);
@@ -68,6 +173,11 @@ function initEventListeners() {
     // Restore modal
     document.getElementById('confirmRestoreBtn').addEventListener('click', confirmRestore);
     document.getElementById('cancelRestoreBtn').addEventListener('click', closeRestoreModal);
+
+    // Token modal
+    document.getElementById('saveTokenBtn').addEventListener('click', saveToken);
+    document.getElementById('cancelTokenBtn').addEventListener('click', closeTokenModal);
+    document.getElementById('clearTokenBtn').addEventListener('click', clearToken);
 
     // Close modals with X button
     document.querySelectorAll('.close').forEach(btn => {
@@ -606,6 +716,51 @@ function confirmRestore() {
     closeRestoreModal();
     renderCategories();
     renderPrompts();
+}
+
+// Token modal functions
+function openTokenModal() {
+    const modal = document.getElementById('tokenModal');
+    const tokenInput = document.getElementById('githubToken');
+    const token = getGitHubToken();
+
+    if (token) {
+        tokenInput.value = token;
+    } else {
+        tokenInput.value = '';
+    }
+
+    modal.classList.add('show');
+    tokenInput.focus();
+}
+
+function closeTokenModal() {
+    document.getElementById('tokenModal').classList.remove('show');
+}
+
+async function saveToken() {
+    const token = document.getElementById('githubToken').value.trim();
+
+    if (!token) {
+        showToast('Si us plau, introdueix un token');
+        return;
+    }
+
+    // Save token
+    localStorage.setItem('githubToken', token);
+    showToast('Token desat correctament');
+    closeTokenModal();
+
+    // Reload data from GitHub
+    await loadData();
+}
+
+function clearToken() {
+    if (confirm('Estàs segur que vols esborrar el token? Les dades locals no s\'esborraran.')) {
+        localStorage.removeItem('githubToken');
+        showToast('Token esborrat');
+        closeTokenModal();
+    }
 }
 
 // Save data to JSON (Export to file)

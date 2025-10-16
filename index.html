@@ -13,7 +13,7 @@
             <div class="header-actions">
                 <button id="addPromptBtn" class="btn btn-primary">+ Afegir Prompt</button>
                 <button id="addCategoryBtn" class="btn btn-secondary">+ Nova Categoria</button>
-                <button id="saveBtn" class="btn btn-success">📥 Exportar JSON</button>
+                <button id="configBtn" class="btn btn-secondary">⚙️ Configuració</button>
             </div>
         </header>
 
@@ -107,6 +107,37 @@
             <div class="modal-footer">
                 <button id="cancelRestoreBtn" class="btn btn-secondary">Cancel·lar</button>
                 <button id="confirmRestoreBtn" class="btn btn-primary">Restaurar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal per configurar token de GitHub -->
+    <div id="tokenModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Configuració de GitHub</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p style="margin-bottom: 15px; color: #6c757d;">
+                    Per sincronitzar les teves dades entre diferents dispositius, necessites un token de GitHub.
+                </p>
+                <div class="form-group">
+                    <label for="githubToken">Token de GitHub:</label>
+                    <input type="password" id="githubToken" class="form-control" placeholder="ghp_...">
+                </div>
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 6px; font-size: 14px; line-height: 1.6;">
+                    <strong>Com obtenir un token:</strong><br>
+                    1. Ves a <a href="https://github.com/settings/tokens" target="_blank">github.com/settings/tokens</a><br>
+                    2. Clica "Generate new token (classic)"<br>
+                    3. Marca només el permís <code>repo</code><br>
+                    4. Copia el token i enganxa'l aquí
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="clearTokenBtn" class="btn btn-danger">🗑️ Esborrar Token</button>
+                <button id="cancelTokenBtn" class="btn btn-secondary">Cancel·lar</button>
+                <button id="saveTokenBtn" class="btn btn-primary">Desar</button>
             </div>
         </div>
     </div>
