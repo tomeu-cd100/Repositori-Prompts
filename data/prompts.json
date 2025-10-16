@@ -35,6 +35,12 @@
       "name": "Pedagogia",
       "order": 4,
       "special": false
+    },
+    {
+      "id": "id_1760636356100_yxp8x1xxw",
+      "name": "Vídeos Alumnes",
+      "order": 5,
+      "special": false
     }
   ],
   "prompts": [
