@@ -91,6 +91,14 @@
       "categoryId": "id_1760636323093_78fze1ord",
       "deleted": false,
       "createdAt": "2025-10-16T17:39:00.453Z"
+    },
+    {
+      "id": "id_1760636377100_59hwpm2el",
+      "title": "Generar preguntes de vídeos",
+      "description": "Ets un professor expert en dificultats d'aprenentatge i orientació acadèmica, a més de portar 15 anys fent classes a grup de Diversificació Curricular a Catalunya, en un entorn desfavorable i on els/les alumnes provenen la majoria d'entorns culturals empobrits i amb baixos recursos econòmics. Hem vist el vídeo: L'Emma vol viure (https://www.youtube.com/watch?v=QPF7zHJlCgk&rco=1) que parla de l'anorèxia. Elabora 15 preguntes, perquè els alumnes puguin expressar la seva opinió personal després d'haver vist el documental, i que aquestes estiguin adaptades a alumnes de 4t d'ESO amb dificultats d'aprenentatge, dislèxia i TDAH. Són alumnes que es troben en un Programa de Diversificació Curricular i tenen moltes mancances de coneixements i a més no són conscients de les seves mancances. No vull que posis les respostes, vull que ells expressin les seves opinions i a més hagin de fer petites recerques per contestar les preguntes.",
+      "categoryId": "id_1760636356100_yxp8x1xxw",
+      "deleted": false,
+      "createdAt": "2025-10-16T17:39:37.100Z"
     }
   ]
 }
