@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca de Prompts</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Biblioteca de Prompts</h1>
+            <div class="header-actions">
+                <button id="addPromptBtn" class="btn btn-primary">+ Afegir Prompt</button>
+                <button id="addCategoryBtn" class="btn btn-secondary">+ Nova Categoria</button>
+                <button id="saveBtn" class="btn btn-success">💾 Desar</button>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <aside class="sidebar">
+                <h2>Categories</h2>
+                <ul id="categoryList" class="category-list">
+                    <!-- Les categories es carregaran dinàmicament -->
+                </ul>
+            </aside>
+
+            <main class="prompts-area">
+                <div id="promptsContainer" class="prompts-container">
+                    <!-- Els prompts es carregaran dinàmicament -->
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Modal per editar/crear prompt -->
+    <div id="promptModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Editar Prompt</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="promptTitle">Títol:</label>
+                    <input type="text" id="promptTitle" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="promptDescription">Descripció:</label>
+                    <textarea id="promptDescription" class="form-control" rows="10"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="promptCategory">Categoria:</label>
+                    <select id="promptCategory" class="form-control">
+                        <!-- Les categories es carregaran dinàmicament -->
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="deletePromptBtn" class="btn btn-danger">🗑️ Esborrar</button>
+                <button id="cancelModalBtn" class="btn btn-secondary">Cancel·lar</button>
+                <button id="savePromptBtn" class="btn btn-primary">Desar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal per editar categoria -->
+    <div id="categoryModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Editar Categoria</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="categoryName">Nom de la categoria:</label>
+                    <input type="text" id="categoryName" class="form-control">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="deleteCategoryBtn" class="btn btn-danger">🗑️ Esborrar Categoria</button>
+                <button id="cancelCategoryBtn" class="btn btn-secondary">Cancel·lar</button>
+                <button id="saveCategoryBtn" class="btn btn-primary">Desar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal per restaurar de la paperera -->
+    <div id="restoreModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Restaurar Prompt</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="restoreCategory">Selecciona la categoria:</label>
+                    <select id="restoreCategory" class="form-control">
+                        <!-- Les categories es carregaran dinàmicament -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="newCategoryName">O crea una nova categoria:</label>
+                    <input type="text" id="newCategoryName" class="form-control" placeholder="Nom de la nova categoria">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="cancelRestoreBtn" class="btn btn-secondary">Cancel·lar</button>
+                <button id="confirmRestoreBtn" class="btn btn-primary">Restaurar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast per notificacions -->
+    <div id="toast" class="toast"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
