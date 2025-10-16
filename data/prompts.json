@@ -23,6 +23,12 @@
       "name": "Prompt Mestre",
       "order": 2,
       "special": false
+    },
+    {
+      "id": "id_1760634578840_v8wkhl759",
+      "name": "Assignatures OPT",
+      "order": 3,
+      "special": false
     }
   ],
   "prompts": [
