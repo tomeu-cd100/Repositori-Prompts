@@ -29,6 +29,12 @@
       "name": "Assignatures OPT",
       "order": 3,
       "special": false
+    },
+    {
+      "id": "id_1760636323093_78fze1ord",
+      "name": "Pedagogia",
+      "order": 4,
+      "special": false
     }
   ],
   "prompts": [
