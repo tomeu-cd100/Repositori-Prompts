@@ -158,6 +158,7 @@ function initEventListeners() {
     // Header buttons
     document.getElementById('addPromptBtn').addEventListener('click', () => openPromptModal());
     document.getElementById('addCategoryBtn').addEventListener('click', () => openCategoryModal());
+    document.getElementById('exportBtn').addEventListener('click', () => saveData());
     document.getElementById('configBtn').addEventListener('click', () => openTokenModal());
 
     // Prompt modal
